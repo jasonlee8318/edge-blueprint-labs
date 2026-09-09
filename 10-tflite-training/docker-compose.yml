@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  # TensorFlow 학습/변환 실습이라 tensorflow-notebook 이미지를 사용합니다.
+  # EdgeX와는 무관하므로 별도 compose 프로젝트로 독립 실행합니다.
+  jupyter:
+    image: jupyter/tensorflow-notebook:latest
+    container_name: jupyter-tflite-training
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_TOKEN=tflite
+    volumes:
+      - ./notebooks:/home/jovyan/work

@@ -1,0 +1,15 @@
+Writable:
+  LogLevel: "INFO"
+
+Service:
+  Host: "localhost"
+  Port: 59750
+  StartupMsg: "edge-stream-pipeline has Started"
+
+MessageBus:
+  Optional:
+    ClientId: "edge-stream-pipeline"
+
+Trigger:
+  # SubscribeTopics 기본값은 공통 설정(core-keeper)에서 내려받습니다.
+  PublishTopic: "edge-stream-pipeline"

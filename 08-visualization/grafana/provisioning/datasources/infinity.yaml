@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: Infinity
+    type: yesoreyeram-infinity-datasource
+    access: proxy
+    isDefault: true
+    jsonData:
+      # 이 목록에 없는 호스트로는 쿼리를 보낼 수 없습니다 (보안 제한).
+      # 6강(edge-stream-pipeline)과 10강(edge-tflite-infer) App Service를
+      # 컨테이너 이름으로 미리 허용해둡니다.
+      allowedHosts:
+        - "http://edgex-stream-pipeline:59750"
+        - "http://edgex-tflite-infer:59752"

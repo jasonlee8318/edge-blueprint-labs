@@ -1,0 +1,24 @@
+name: visualization-lab
+
+services:
+  # ── 8강: Grafana — 6강/10강 App Service의 /dashboard 엔드포인트를 시각화 ──
+  # 3회차(03-edgex-setup) + 6강 + 10강이 먼저 떠 있어야 의미 있는 데이터가 보입니다.
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    environment:
+      # Infinity 데이터소스 플러그인 — Grafana 공식 문서가 권장하는
+      # 최신 JSON/CSV/XML API 시각화 플러그인입니다 (예전 marcusolsson-json
+      # 플러그인은 지원 종료 예정이라 이걸 사용합니다).
+      - GF_INSTALL_PLUGINS=yesoreyeram-infinity-datasource
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - edgex-network
+
+networks:
+  edgex-network:
+    external: true
+    name: edgex_edgex-network

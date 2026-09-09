@@ -1,0 +1,36 @@
+name: edge-store-forward-lab
+
+services:
+  # ── Mock Cloud: 정지시키면 네트워크 장애가 재현됩니다 ──
+  mock-cloud:
+    image: python:3.11-slim
+    container_name: mock-cloud
+    command: python /app/server.py
+    volumes:
+      - ./mock-cloud:/app
+    networks:
+      - edgex-network
+
+  # ── 7강 App Service: Store&Forward 파이프라인 ──
+  # 3회차(03-edgex-setup)가 먼저 떠 있어야 하고,
+  # Motor01 디바이스는 6강에서 이미 등록했다면 그대로 재사용합니다.
+  edge-store-forward:
+    build: ./app
+    container_name: edgex-store-forward
+    hostname: edgex-store-forward
+    command: ["--registry", "-cp=keeper.http://edgex-core-keeper:59890"]
+    environment:
+      - EDGEX_SECURITY_SECRET_STORE=false
+      - SERVICE_HOST=edgex-store-forward
+      - MOCK_CLOUD_URL=http://mock-cloud:8090/ingest
+    depends_on:
+      - mock-cloud
+    ports:
+      - "59751:59751"
+    networks:
+      - edgex-network
+
+networks:
+  edgex-network:
+    external: true
+    name: edgex_edgex-network   # 03-edgex-setup이 만든 네트워크

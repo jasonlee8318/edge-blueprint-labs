@@ -1,0 +1,23 @@
+name: "Motor-Vibration-Sensor"
+manufacturer: "Course-Lab"
+model: "Motor01-Sim"
+labels:
+  - "rest"
+  - "motor"
+description: "6강 실습용 — 모터 온도/진동 데이터를 REST로 밀어 넣는 가상 센서 프로필"
+
+deviceResources:
+  - name: "Temperature"
+    isHidden: true
+    description: "모터 온도 (섭씨)"
+    properties:
+      valueType: "Float64"
+      readWrite: "R"
+      mediaType: "text/plain"
+  - name: "Vibration"
+    isHidden: true
+    description: "모터 진동 (mm/s)"
+    properties:
+      valueType: "Float64"
+      readWrite: "R"
+      mediaType: "text/plain"

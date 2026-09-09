@@ -1,0 +1,21 @@
+name: "Motor-MQTT-Sensor"
+manufacturer: "Course-Lab"
+model: "MotorMQTT01-Sim"
+labels:
+  - "mqtt"
+  - "motor"
+description: "4강 실습용 — MQTT로 온도/진동 데이터를 발행하는 가상 센서 프로필"
+
+deviceResources:
+  - name: "Temperature"
+    isHidden: false
+    description: "모터 온도 (섭씨)"
+    properties:
+      valueType: "Float64"
+      readWrite: "R"
+  - name: "Vibration"
+    isHidden: false
+    description: "모터 진동 (mm/s)"
+    properties:
+      valueType: "Float64"
+      readWrite: "R"

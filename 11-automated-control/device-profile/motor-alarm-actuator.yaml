@@ -1,0 +1,16 @@
+name: "Motor-Alarm-Actuator"
+manufacturer: "Course-Lab"
+model: "MotorAlarm01-Sim"
+labels:
+  - "actuator"
+  - "alarm"
+description: "11강 실습용 — AI 판정 결과에 따라 켜고 끄는 가상 알람 사이렌"
+
+deviceResources:
+  - name: "AlarmSiren"
+    isHidden: false
+    description: "true면 사이렌 작동, false면 정지"
+    properties:
+      valueType: "Bool"
+      readWrite: "RW"
+      defaultValue: "false"

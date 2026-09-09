@@ -1,0 +1,26 @@
+name: mqtt-integration-lab
+
+services:
+  # ── 4강: device-mqtt — MQTT로 들어오는 데이터를 받는 공식 EdgeX 디바이스 서비스 ──
+  # 3회차 스택에는 mqtt-broker(eclipse-mosquitto)는 있지만 device-mqtt는
+  # 기본 포함되어 있지 않아 이 회차에서 추가합니다.
+  # 3회차(03-edgex-setup)가 먼저 떠 있어야 합니다.
+  device-mqtt:
+    image: edgexfoundry/device-mqtt:4.0.2
+    container_name: edgex-device-mqtt
+    hostname: edgex-device-mqtt
+    command: ["--registry", "-cp=keeper.http://edgex-core-keeper:59890"]
+    environment:
+      - EDGEX_SECURITY_SECRET_STORE=false
+      - SERVICE_HOST=edgex-device-mqtt
+      - MQTTBROKERINFO_HOST=edgex-mqtt-broker
+      - MQTTBROKERINFO_PORT=1883
+    ports:
+      - "59982:59982"
+    networks:
+      - edgex-network
+
+networks:
+  edgex-network:
+    external: true
+    name: edgex_edgex-network

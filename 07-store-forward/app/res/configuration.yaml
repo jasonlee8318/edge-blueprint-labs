@@ -1,0 +1,33 @@
+Writable:
+  LogLevel: "INFO"
+  StoreAndForward:
+    Enabled: true
+    RetryInterval: "10s"
+    MaxRetryCount: 10
+
+Service:
+  Host: "localhost"
+  Port: 59751
+  StartupMsg: "edge-store-forward has Started"
+
+# Store&Forward가 전송 실패 데이터를 보관하는 곳 — 03 스택의 Postgres를 그대로 사용
+Database:
+  Type: "postgres"
+  Host: "edgex-postgres"
+  Port: 5432
+  Name: "edgex_db"
+  Timeout: "5s"
+
+SecretStore:
+  Type: "insecure"
+
+InsecureSecrets:
+  postgres:
+    SecretName: "postgres"
+    SecretData:
+      username: "postgres"
+      password: "postgres"
+
+MessageBus:
+  Optional:
+    ClientId: "edge-store-forward"

@@ -1,0 +1,11 @@
+Writable:
+  LogLevel: "INFO"
+
+Service:
+  Host: "localhost"
+  Port: 59749
+  StartupMsg: "edge-sensor-classifier has Started"
+
+MessageBus:
+  Optional:
+    ClientId: "edge-sensor-classifier"

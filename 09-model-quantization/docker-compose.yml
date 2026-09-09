@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  # 모델 학습·양자화 실습이라 scikit-learn이 필요합니다.
+  # jupyter/scipy-notebook은 numpy/scikit-learn이 이미 포함돼 있어 별도 설치가 없습니다.
+  # EdgeX 스택과는 무관하므로 별도 compose 프로젝트로 독립 실행합니다.
+  jupyter:
+    image: jupyter/scipy-notebook:latest
+    container_name: jupyter-quantization
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_TOKEN=quant
+    volumes:
+      - ./notebooks:/home/jovyan/work

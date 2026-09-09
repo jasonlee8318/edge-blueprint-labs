@@ -1,0 +1,11 @@
+Writable:
+  LogLevel: "INFO"
+
+Service:
+  Host: "localhost"
+  Port: 59752
+  StartupMsg: "edge-tflite-infer has Started"
+
+MessageBus:
+  Optional:
+    ClientId: "edge-tflite-infer"
