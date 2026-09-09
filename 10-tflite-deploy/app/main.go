@@ -15,11 +15,12 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
+
+	"github.com/labstack/echo/v4"
 
 	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg"
 	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg/interfaces"
@@ -94,7 +95,7 @@ func main() {
 		os.Exit(-1)
 	}
 
-	if err := service.AddRoute("/dashboard", dashboardHandler, http.MethodGet); err != nil {
+	if err := service.AddCustomRoute("/dashboard", interfaces.Unauthenticated, dashboardHandler, http.MethodGet); err != nil {
 		lc.Errorf("/dashboard 라우트 등록 실패: %s", err.Error())
 		os.Exit(-1)
 	}
@@ -185,13 +186,12 @@ func runInference(ctx interfaces.AppFunctionContext, data interface{}) (bool, in
 	return true, nil
 }
 
-func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+func dashboardHandler(c echo.Context) error {
 	cacheMu.Lock()
 	resp := cache
 	cacheMu.Unlock()
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	return c.JSON(http.StatusOK, resp)
 }
 
 func round4(v float64) float64 {

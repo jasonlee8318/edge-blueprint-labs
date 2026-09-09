@@ -11,12 +11,13 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/labstack/echo/v4"
 
 	// App Functions SDK — EdgeX 위에서 도는 "App Service"를 만들 때 쓰는 표준 도구입니다.
 	// pkg:        서비스 생성/실행의 진입점 (NewAppService, Run)
@@ -101,7 +102,7 @@ func main() {
 
 	// AddRoute — 이 App Service에 우리만의 HTTP 엔드포인트를 하나 추가합니다.
 	// "Dashboard가 Cache의 최신 결과를 조회한다"는 원고의 문장을 그대로 구현한 것입니다.
-	if err := service.AddRoute("/dashboard", dashboardHandler, http.MethodGet); err != nil {
+	if err := service.AddCustomRoute("/dashboard", interfaces.Unauthenticated, dashboardHandler, http.MethodGet); err != nil {
 		lc.Errorf("/dashboard 라우트 등록 실패: %s", err.Error())
 		os.Exit(-1)
 	}
@@ -221,7 +222,7 @@ func processReading(ctx interfaces.AppFunctionContext, data interface{}) (bool, 
 //    (2-4강 핵심 메시지: 캐싱은 "저장"이 아니라 "최신성 유지 정책"이 핵심)
 // --------------------------------------------
 
-func dashboardHandler(w http.ResponseWriter, r *http.Request) {
+func dashboardHandler(c echo.Context) error {
 	mu.Lock()
 	entry := cache // 잠금 상태에서 값을 복사해온 뒤 곧바로 풀어줍니다.
 	mu.Unlock()
@@ -239,8 +240,7 @@ func dashboardHandler(w http.ResponseWriter, r *http.Request) {
 		"stale": age > cacheTTL,
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	return c.JSON(http.StatusOK, resp)
 }
 
 // round2는 소수점 둘째 자리까지 반올림하는 작은 도우미 함수입니다.

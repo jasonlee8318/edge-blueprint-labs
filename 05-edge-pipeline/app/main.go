@@ -14,11 +14,12 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
+
+	"github.com/labstack/echo/v4"
 
 	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg"
 	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg/interfaces"
@@ -81,7 +82,7 @@ func main() {
 	}
 
 	// /status — 지금까지의 분류 통계와 가장 최근 판정 결과를 조회하는 엔드포인트
-	if err := service.AddRoute("/status", statusHandler, http.MethodGet); err != nil {
+	if err := service.AddCustomRoute("/status", interfaces.Unauthenticated, statusHandler, http.MethodGet); err != nil {
 		lc.Errorf("/status 라우트 등록 실패: %s", err.Error())
 		os.Exit(-1)
 	}
@@ -207,7 +208,10 @@ func classify(ctx interfaces.AppFunctionContext, data interface{}) (bool, interf
 // 3. 현재까지의 분류 통계 조회 — 원고 8번(최종 처리 흐름 요약)에 대응
 // --------------------------------------------
 
-func statusHandler(w http.ResponseWriter, r *http.Request) {
+// v4 SDK는 표준 net/http가 아니라 Echo 프레임워크로 라우트를 처리합니다.
+// 핸들러가 (http.ResponseWriter, *http.Request) 대신 (echo.Context) error를 받고,
+// c.JSON()으로 상태 코드+JSON 응답을 한 번에 보냅니다.
+func statusHandler(c echo.Context) error {
 	mu.Lock()
 	resp := map[string]interface{}{
 		"counts":      counts,     // 지금까지 누적된 버킷별 건수
@@ -215,8 +219,7 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	mu.Unlock()
 
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	return c.JSON(http.StatusOK, resp)
 }
 
 func round2(v float64) float64 {

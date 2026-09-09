@@ -18,6 +18,13 @@ App Functions SDK **v3.1.1**을 쓰고 있었는데, 이 버전이 참조하는
 **App Functions SDK v4.0.2로 업그레이드**해서 해결했습니다(go.mod,
 main.go의 import 경로, Dockerfile의 Go 버전(1.25) 전부 반영됨).
 7강이 처음부터 v4를 썼던 게 우연히 맞는 선택이었습니다.
+v4로 올리면서 **API도 같이 바뀌었습니다** — 라우트 등록이 `AddRoute`
+(표준 net/http)에서 `AddCustomRoute`(Echo 프레임워크)로 변경됐습니다.
+핸들러 시그니처가 `func(w http.ResponseWriter, r *http.Request)`에서
+`func(c echo.Context) error`로, 인증 여부를 나타내는 두 번째 인자
+(`interfaces.Unauthenticated`)가 새로 추가됐습니다. 이 코드에는 이미
+반영되어 있습니다.
+
 
 ## 이 방식이 실제로 되는지 미리 검증했습니다
 
