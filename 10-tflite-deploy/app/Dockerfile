@@ -6,7 +6,7 @@
 # GitHub Release에 올려둔 "buildkit"(사전 컴파일된 lib+헤더)을 받아 씁니다.
 # 이 방식은 실제로 다운로드해 빌드·실행까지 확인했습니다.
 # ============================================================
-FROM golang:1.23-bookworm AS builder
+FROM golang:1.25-bookworm AS builder
 
 ARG GO_TFLITE_VERSION=v1.0.7
 

@@ -4,7 +4,7 @@
 # `docker compose build`로 실행됩니다 — go mod tidy가 필요한
 # 모든 의존성을 이 시점에 새로 받습니다.
 # ============================================================
-FROM golang:1.23-bookworm AS builder
+FROM golang:1.25-bookworm AS builder
 
 WORKDIR /app
 COPY go.mod ./

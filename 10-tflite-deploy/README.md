@@ -4,6 +4,21 @@ Motor01의 실시간 온도/진동 값을 **실제 TensorFlow Lite 인터프리�
 추론합니다. 지금까지(6강)의 `temp >= 90` 같은 단순 임계치 규칙을
 **학습된 신경망**으로 교체하는 회차입니다.
 
+
+## ⚠️ 긴급 수정 — v3 SDK로는 이 스택에 연결이 안 됩니다
+
+App Functions SDK **v3.1.1**을 쓰고 있었는데, 이 버전이 참조하는
+`go-mod-configuration`은 레지스트리 타입으로 `consul`만 지원하고
+`keeper`는 지원하지 않습니다(실제 소스 `factory.go`에서 확인 — `keeper`
+케이스가 아예 없고 default에서 `unknown configuration client type`
+에러를 던집니다). 그런데 3회차 스택은 Consul이 아니라 core-keeper를
+씁니다. 즉 v3 SDK로 만든 이 App Service는 **애초에 이 스택에 연결될
+수 없는 구조**였습니다.
+
+**App Functions SDK v4.0.2로 업그레이드**해서 해결했습니다(go.mod,
+main.go의 import 경로, Dockerfile의 Go 버전(1.25) 전부 반영됨).
+7강이 처음부터 v4를 썼던 게 우연히 맞는 선택이었습니다.
+
 ## 이 방식이 실제로 되는지 미리 검증했습니다
 
 `go-tflite`(mattn/go-tflite)는 TensorFlow Lite C API 공유 라이브러리가
@@ -34,7 +49,8 @@ docker compose up -d --build
 ## 결과 확인
 
 ```bash
-cd ../06-stream-pipeline/injector
+cd injector
+pip install requests --break-system-packages   # 최초 1회
 python3 sensor_injector.py   # Motor01 값 주입
 
 # 다른 터미널에서

@@ -39,8 +39,9 @@ docker compose up -d --build
 # 1. 정상 동작 확인 — mock-cloud 로그에 데이터가 찍히는지 확인
 docker compose logs -f mock-cloud
 
-# 2. (다른 터미널에서) 센서 시뮬레이터 실행 — 6강의 것을 그대로 사용
-cd ../06-stream-pipeline/injector
+# 2. (다른 터미널에서) 센서 시뮬레이터 실행
+cd injector
+pip install requests --break-system-packages   # 최초 1회
 python3 sensor_injector.py
 
 # 3. 네트워크 장애 발생 — Cloud 컨테이너를 정지

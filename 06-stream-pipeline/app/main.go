@@ -22,13 +22,13 @@ import (
 	// pkg:        서비스 생성/실행의 진입점 (NewAppService, Run)
 	// interfaces: 파이프라인 함수가 받는 컨텍스트/로거 등의 타입
 	// transforms: SDK가 미리 만들어둔 재사용 가능한 파이프라인 조각들 (필터, 전송 등)
-	"github.com/edgexfoundry/app-functions-sdk-go/v3/pkg"
-	"github.com/edgexfoundry/app-functions-sdk-go/v3/pkg/interfaces"
-	"github.com/edgexfoundry/app-functions-sdk-go/v3/pkg/transforms"
+	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg"
+	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg/interfaces"
+	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg/transforms"
 
 	// go-mod-core-contracts — EdgeX 전체가 공유하는 데이터 모델(Event, Reading 등)입니다.
 	// Core Data가 우리에게 넘겨주는 데이터는 항상 이 dtos.Event 형태입니다.
-	"github.com/edgexfoundry/go-mod-core-contracts/v3/dtos"
+	"github.com/edgexfoundry/go-mod-core-contracts/v4/dtos"
 )
 
 // serviceKey는 이 App Service를 EdgeX 안에서 식별하는 이름입니다.

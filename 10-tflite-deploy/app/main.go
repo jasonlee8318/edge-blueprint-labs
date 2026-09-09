@@ -21,10 +21,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/edgexfoundry/app-functions-sdk-go/v3/pkg"
-	"github.com/edgexfoundry/app-functions-sdk-go/v3/pkg/interfaces"
-	"github.com/edgexfoundry/app-functions-sdk-go/v3/pkg/transforms"
-	"github.com/edgexfoundry/go-mod-core-contracts/v3/dtos"
+	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg"
+	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg/interfaces"
+	"github.com/edgexfoundry/app-functions-sdk-go/v4/pkg/transforms"
+	"github.com/edgexfoundry/go-mod-core-contracts/v4/dtos"
 
 	// go-tflite — TensorFlow Lite의 C API를 cgo로 감싼 바인딩입니다.
 	// Dockerfile이 사전 컴파일된 라이브러리(buildkit)를 받아 링크해줍니다.
