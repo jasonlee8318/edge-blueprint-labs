@@ -1,6 +1,6 @@
 // ============================================================
 // edge-tflite-infer
-// 10강: Motor01 센서 값을 실제 TFLite 모델로 추론하는 EdgeX App Service
+// 10강: Motor03 센서 값을 실제 TFLite 모델로 추론하는 EdgeX App Service
 //
 // go-tflite(mattn/go-tflite)로 진짜 TensorFlow Lite C API를 링크해서 씁니다.
 // 이 코드는 샌드박스에서 실제로 학습한 모델(motor_anomaly_model.tflite)로
@@ -8,7 +8,7 @@
 // 확인한 뒤 작성했습니다 (0.6263745427... == 0.62637454).
 //
 // 6강과 구조는 비슷하지만 결정적으로 다른 점 하나: 6강은 "규칙"(온도 임계치)으로
-// 판단했다면, 이 서비스는 "학습된 신경망"으로 판단합니다. 같은 Motor01 데이터를
+// 판단했다면, 이 서비스는 "학습된 신경망"으로 판단합니다. 같은 Motor03 데이터를
 // 두 가지 방식으로 각각 판정해보고 결과를 비교하는 것이 12강의 과제입니다.
 // ============================================================
 
@@ -34,7 +34,7 @@ import (
 
 const (
 	serviceKey  = "edge-tflite-infer"
-	deviceName  = "Motor01"
+	deviceName  = "Motor03"
 	modelPath   = "./model/motor_anomaly_model.tflite" // 10-tflite-training에서 만든 모델
 	scoreThresh = 0.5                                  // 이 값 이상이면 ANOMALY (원고의 sigmoid 출력 임계치)
 )
@@ -83,9 +83,9 @@ func main() {
 		lc.Errorf("AllocateTensors 실패: %v", status)
 		os.Exit(-1)
 	}
-	lc.Info("TFLite 모델 로드 완료 — Motor01 추론 준비됨")
+	lc.Info("TFLite 모델 로드 완료 — Motor03 추론 준비됨")
 
-	// 파이프라인: Motor01 이벤트만 통과시키고 runInference에서 실제 추론을 수행합니다.
+	// 파이프라인: Motor03 이벤트만 통과시키고 runInference에서 실제 추론을 수행합니다.
 	err := service.SetDefaultFunctionsPipeline(
 		transforms.NewFilterFor([]string{deviceName}).FilterByDeviceName,
 		runInference,
@@ -108,7 +108,7 @@ func main() {
 }
 
 // --------------------------------------------
-// 2. Motor01 이벤트 -> 정규화 -> TFLite 추론 -> NORMAL/ANOMALY 판정
+// 2. Motor03 이벤트 -> 정규화 -> TFLite 추론 -> NORMAL/ANOMALY 판정
 //    (10강 원고의 9~13번 단계에 정확히 대응)
 //
 // ⚠️ device-rest는 POST 한 번당 Event 한 개(리딩 1개)를 만듭니다.

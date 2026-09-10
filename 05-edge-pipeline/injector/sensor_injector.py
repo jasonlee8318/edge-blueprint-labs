@@ -43,7 +43,7 @@ def generate():
 
 if __name__ == "__main__":
     print(f"Motor01 시뮬레이터 시작 — {DEVICE_REST_URL} 로 1초마다 전송합니다.")
-    print("(먼저 EdgeX UI에서 Motor-Vibration-Sensor 프로필을 임포트하고")
+    print("(먼저 EdgeX UI에서 Motor01-Vibration-Sensor 프로필을 임포트하고")
     print(" device-rest 서비스에 'Motor01' 디바이스를 등록해야 합니다.)")
 
     for i in range(60):

@@ -28,14 +28,41 @@ v4로 올리면서 **API도 같이 바뀌었습니다** — 라우트 등록이 
 
 ## 시작 전 필수 조건
 
-1. **3회차(`03-edgex-setup`)가 실행 중이어야 합니다.**
-2. **Motor01 디바이스가 등록돼 있어야 합니다** (6강에서 이미 했다면 재사용).
+**3회차(`03-edgex-setup`)가 먼저 실행 중이어야 합니다.**
 
-## 실행
+```bash
+cd ../03-edgex-setup
+docker compose up -d
+```
+
+## 1단계 — Motor01 디바이스 등록 (EdgeX UI)
+
+> 7강을 이미 진행하셨다면 Motor01이 그대로 남아있으니 이 단계는
+> 건너뛰어도 됩니다. (6강은 별도의 Motor02를 쓰므로 여기 해당 안 됩니다.)
+> 저장소를 새로 받았거나 3회차를 새로 띄우셨다면 다시 등록해야 합니다.
+
+1. `http://localhost:4000` 접속
+2. **Metadata → Device Profile → Add Profile** → 이 폴더의
+   `device-profile/motor01-vibration-sensor.yaml`을 화면에 드래그 → Submit
+3. **Metadata → Device → Add Device Wizard**
+
+| 단계 | 입력값 |
+|---|---|
+| ① SelectDeviceService | `device-rest` 체크 → Next |
+| ② SelectDeviceProfile | `Motor01-Vibration-Sensor` 선택 → Next |
+| ③ DevicePrimary | Device Name: **`Motor01`** (반드시 이 이름) → Next |
+| ④ CreateAutoEvent | 건너뛰고 Next |
+| ⑤ CreateDeviceProtocol | 필드 전부 빈칸으로 두고 Submit |
+
+완료 후 **Metadata → Device** 목록에 `Motor01`이 보이면 성공입니다.
+
+## 2단계 — App Service 빌드·기동
 
 ```bash
 docker compose up -d --build
 ```
+
+## 3단계 — 센서 데이터 주입
 
 ```bash
 cd injector
@@ -43,7 +70,7 @@ pip install requests --break-system-packages   # 최초 1회
 python3 sensor_injector.py
 ```
 
-## 결과 확인
+## 4단계 — 결과 확인
 
 ```bash
 curl http://localhost:59749/status
@@ -79,6 +106,10 @@ App Service를 설계할 때도 "분류(5강) → 판단(6강) → 전송(7강)"
 
 ## 자주 겪는 문제
 
+- **counts.total이 계속 0** → Motor01 미등록이 가장 흔한 원인입니다.
+  Metadata → Device에서 `Motor01`이 있는지, 이름이 정확히 일치하는지
+  확인하세요 (`MotorMQTT01`은 4강용 디바이스라 이름이 다릅니다 — 헷갈리지
+  않도록 주의)
 - **counts.invalid만 계속 올라감** → Motor01 등록이 안 됐거나
   injector가 다른 디바이스로 전송 중인지 확인
 - **전체 초기화** → `docker compose down`

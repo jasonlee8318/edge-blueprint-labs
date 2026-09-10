@@ -1,5 +1,5 @@
 # ============================================================
-# Motor01 센서 시뮬레이터
+# Motor03 센서 시뮬레이터
 # (6강의 injector와 동일한 스크립트입니다 — 10강 실습을 다른 폴더로
 #  안 넘어가고 진행할 수 있도록 이 폴더에도 그대로 복사해뒀습니다.)
 # device-rest 서비스(POST /api/v3/resource/{device}/{resource})로
@@ -20,7 +20,7 @@ import time
 import requests
 
 DEVICE_REST_URL = "http://localhost:59986/api/v3/resource"
-DEVICE_NAME = "Motor01"
+DEVICE_NAME = "Motor03"
 
 
 def push(resource: str, value: float):
@@ -41,9 +41,9 @@ def generate():
 
 
 if __name__ == "__main__":
-    print(f"Motor01 시뮬레이터 시작 — {DEVICE_REST_URL} 로 1초마다 전송합니다.")
-    print("(먼저 EdgeX UI에서 Motor-Vibration-Sensor 프로필을 임포트하고")
-    print(" device-rest 서비스에 'Motor01' 디바이스를 등록해야 합니다.)")
+    print(f"Motor03 시뮬레이터 시작 — {DEVICE_REST_URL} 로 1초마다 전송합니다.")
+    print("(먼저 EdgeX UI에서 Motor03-Vibration-Sensor 프로필을 임포트하고")
+    print(" device-rest 서비스에 'Motor03' 디바이스를 등록해야 합니다.)")
 
     for i in range(60):
         data = generate()

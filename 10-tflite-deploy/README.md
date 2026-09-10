@@ -1,8 +1,12 @@
 # 10강 (2/2) — 진짜 TFLite 모델을 EdgeX 위에서 추론
 
-Motor01의 실시간 온도/진동 값을 **실제 TensorFlow Lite 인터프리터**로
+Motor03의 실시간 온도/진동 값을 **실제 TensorFlow Lite 인터프리터**로
 추론합니다. 지금까지(6강)의 `temp >= 90` 같은 단순 임계치 규칙을
 **학습된 신경망**으로 교체하는 회차입니다.
+
+> 디바이스 이름을 5·7강의 `Motor01`, 6강의 `Motor02`와 다르게
+> `Motor03`으로 지정해, 이 회차가 다른 회차에 등록된 디바이스에
+> 의존하지 않고 독립적으로 진행되도록 했습니다.
 
 
 ## ⚠️ 긴급 수정 — v3 SDK로는 이 스택에 연결이 안 됩니다
@@ -41,7 +45,10 @@ v4로 올리면서 **API도 같이 바뀌었습니다** — 라우트 등록이 
 ## 시작 전 필수 조건
 
 1. **3회차(`03-edgex-setup`)가 실행 중이어야 합니다.**
-2. **Motor01 디바이스가 등록돼 있어야 합니다** (6강에서 이미 했다면 재사용).
+2. **Motor03 디바이스를 등록해야 합니다** — 이 폴더의
+   `device-profile/motor03-vibration-sensor.yaml`을 업로드한 뒤, Add
+   Device Wizard에서 Service=`device-rest`, Profile=`Motor03-Vibration-Sensor`,
+   Device Name=`Motor03`으로 등록하세요.
 
 ## 실행
 
@@ -58,7 +65,7 @@ docker compose up -d --build
 ```bash
 cd injector
 pip install requests --break-system-packages   # 최초 1회
-python3 sensor_injector.py   # Motor01 값 주입
+python3 sensor_injector.py   # Motor03 값 주입
 
 # 다른 터미널에서
 curl http://localhost:59752/dashboard
@@ -72,11 +79,13 @@ curl http://localhost:59752/dashboard
 
 ## 알아두실 점
 
-- App Functions SDK는 6강과 동일하게 **v3.1.1**을 사용합니다(Go 1.22 호환).
+- App Functions SDK는 v4.0.2를 사용합니다.
 - TFLite 인터프리터의 `Invoke()`는 스레드 세이프하지 않아 mutex로 감쌌습니다.
-- 이 App Service는 6강 App Service와 **별개의 컨테이너**로 같은 Motor01
-  이벤트를 각자 구독합니다. 두 방식(규칙 기반 vs AI 기반)의 판정을
-  나란히 비교해볼 수 있습니다.
+- 이 App Service는 6강과 **별개의 디바이스(Motor03)**를 독립적으로
+  구독합니다. 6강의 규칙 기반 판정과 이 회차의 AI 기반 판정을 나란히
+  비교하고 싶다면, 두 회차의 injector를 동시에 돌리면서 값의 범위를
+  비슷하게 맞춰 관찰하면 됩니다(완전히 같은 이벤트는 아니지만, 같은
+  분포의 데이터로 판정 방식의 차이를 비교할 수 있습니다).
 
 ## 자주 겪는 문제
 

@@ -1,5 +1,5 @@
 # ============================================================
-# Motor01 센서 시뮬레이터
+# Motor02 센서 시뮬레이터
 # device-rest 서비스(POST /api/v3/resource/{device}/{resource})로
 # 실제 EdgeX 이벤트를 1초마다 주입합니다. 진짜 센서가 있다면 이 스크립트
 # 자리에 그 센서의 통신 코드가 들어간다고 생각하면 됩니다.
@@ -18,7 +18,7 @@ import time
 import requests
 
 DEVICE_REST_URL = "http://localhost:59986/api/v3/resource"
-DEVICE_NAME = "Motor01"
+DEVICE_NAME = "Motor02"
 
 
 def push(resource: str, value: float):
@@ -39,9 +39,9 @@ def generate():
 
 
 if __name__ == "__main__":
-    print(f"Motor01 시뮬레이터 시작 — {DEVICE_REST_URL} 로 1초마다 전송합니다.")
-    print("(먼저 EdgeX UI에서 Motor-Vibration-Sensor 프로필을 임포트하고")
-    print(" device-rest 서비스에 'Motor01' 디바이스를 등록해야 합니다.)")
+    print(f"Motor02 시뮬레이터 시작 — {DEVICE_REST_URL} 로 1초마다 전송합니다.")
+    print("(먼저 EdgeX UI에서 Motor02-Vibration-Sensor 프로필을 임포트하고")
+    print(" device-rest 서비스에 'Motor02' 디바이스를 등록해야 합니다.)")
 
     for i in range(60):
         data = generate()

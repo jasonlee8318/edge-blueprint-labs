@@ -3,7 +3,7 @@
 // 6강: Sensor -> Buffer -> Window Processing -> Event Detection -> Cache
 // EdgeX Foundry의 App Functions SDK로 구현한 진짜 App Service입니다.
 //
-// device-rest가 Motor01(Motor-Vibration-Sensor 프로필)로부터 받은
+// device-rest가 Motor02(Motor02-Vibration-Sensor 프로필)로부터 받은
 // Temperature/Vibration Reading을 Core Data -> Message Bus를 거쳐
 // 이 서비스가 실시간으로 수신하면서 파이프라인을 실행합니다.
 // ============================================================
@@ -45,7 +45,7 @@ const (
 	tempAnomaly      = 80.0            // 평균 온도가 이 값 이상이면 이상(ANOMALY)
 	vibrationAnomaly = 5.0             // 평균 진동이 이 값 이상이면 이상(ANOMALY)
 	cacheTTL         = 5 * time.Second // Cache에 저장된 결과를 "신선하다"고 볼 수 있는 최대 시간
-	deviceName       = "Motor01"       // 이 서비스가 구독할 디바이스 이름
+	deviceName       = "Motor02"       // 이 서비스가 구독할 디바이스 이름
 )
 
 // --------------------------------------------
@@ -87,7 +87,7 @@ func main() {
 	lc := service.LoggingClient() // EdgeX 표준 로거 — 다른 서비스와 같은 형식으로 로그가 남습니다.
 
 	// 파이프라인 = 이벤트가 들어올 때마다 순서대로 실행되는 함수들의 목록입니다.
-	// 1) FilterByDeviceName: Motor01이 아닌 다른 디바이스의 이벤트는 여기서 걸러냅니다.
+	// 1) FilterByDeviceName: Motor02이 아닌 다른 디바이스의 이벤트는 여기서 걸러냅니다.
 	//    (플랫폼에는 여러 디바이스가 있을 수 있으므로, 우리 서비스와 무관한 이벤트로
 	//     아래 로직이 낭비되지 않도록 막아주는 역할입니다.)
 	// 2) processReading: 실제 Window/이상탐지/Cache 로직 (5번 섹션에서 정의)
@@ -107,7 +107,7 @@ func main() {
 		os.Exit(-1)
 	}
 
-	lc.Info("edge-stream-pipeline 시작 — Motor01 이벤트를 기다립니다.")
+	lc.Info("edge-stream-pipeline 시작 — Motor02 이벤트를 기다립니다.")
 
 	// Run()은 서비스를 계속 실행 상태로 유지합니다 (여기서 블로킹됩니다).
 	// 이벤트가 들어올 때마다 위에서 설정한 파이프라인이 자동으로 호출됩니다.
@@ -132,7 +132,7 @@ var (
 	haveTemp, haveVib bool    // 아직 한 번도 안 왔으면 false (서비스 시작 직후 등)
 )
 
-// processReading은 파이프라인의 두 번째 단계로, Motor01 이벤트가 들어올 때마다 호출됩니다.
+// processReading은 파이프라인의 두 번째 단계로, Motor02 이벤트가 들어올 때마다 호출됩니다.
 // 반환값 (bool, interface{})의 bool이 false면 "여기서 파이프라인을 멈춘다"는 뜻이고,
 // true면 다음 단계(있다면)로 데이터를 넘긴다는 뜻입니다. 이 서비스는 이 함수가
 // 마지막 단계라서 true를 반환해도 별도로 이어지는 곳은 없습니다.

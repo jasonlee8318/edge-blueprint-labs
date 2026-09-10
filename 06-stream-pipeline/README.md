@@ -24,9 +24,13 @@ v4로 올리면서 **API도 같이 바뀌었습니다** — 라우트 등록이 
 ## 진짜 EdgeX Foundry 위에서 실행하는 버전
 
 Sensor → Buffer → Window Processing → Event Detection → Cache 파이프라인을
-**Go로 작성한 EdgeX App Service**로 구현합니다. Motor01이라는 가상 센서가
+**Go로 작성한 EdgeX App Service**로 구현합니다. Motor02이라는 가상 센서가
 device-rest를 통해 실제 EdgeX Core Data에 온도/진동 값을 보내고, 우리 App
 Service가 Core Data → Message Bus를 거쳐 이 이벤트를 실시간으로 받아 처리합니다.
+
+> 디바이스 이름을 5·7·10강의 `Motor01`과 다르게 `Motor02`로 지정해,
+> 이 회차가 다른 회차에 등록된 디바이스에 의존하지 않고 독립적으로
+> 진행되도록 했습니다.
 
 ## 시작 전 필수 조건
 
@@ -38,16 +42,16 @@ docker compose up -d
 docker compose ps   # 모든 서비스가 떠 있는지 확인
 ```
 
-## 1단계 — Motor01 디바이스 등록 (EdgeX UI, GUI로 진행)
+## 1단계 — Motor02 디바이스 등록 (EdgeX UI, GUI로 진행)
 
 1. 브라우저에서 http://localhost:4000 접속 (EdgeX UI)
-2. **Device Profiles → Import** → `device-profile/motor-vibration-sensor.yaml` 업로드
+2. **Device Profiles → Import** → `device-profile/motor02-vibration-sensor.yaml` 업로드
 3. **Devices → Add Device**
-   - Name: `Motor01`
-   - Profile: `Motor-Vibration-Sensor`
+   - Name: `Motor02`
+   - Profile: `Motor02-Vibration-Sensor`
    - Service: `device-rest`
    - Protocol: `other` (빈 값으로 두면 됩니다)
-4. Devices 목록에 Motor01이 보이면 완료
+4. Devices 목록에 Motor02이 보이면 완료
 
 ## 2단계 — App Service(우리 파이프라인) 기동
 
@@ -66,7 +70,7 @@ pip install requests --break-system-packages   # 최초 1회
 python3 sensor_injector.py
 ```
 
-1초마다 Motor01의 Temperature/Vibration 값을 device-rest로 밀어 넣습니다.
+1초마다 Motor02의 Temperature/Vibration 값을 device-rest로 밀어 넣습니다.
 EdgeX UI의 **Events** 메뉴에서 실제로 Core Data에 쌓이는 걸 확인할 수 있습니다.
 
 ## 4단계 — 파이프라인 결과 확인 (Dashboard 역할)
@@ -90,7 +94,7 @@ curl http://localhost:59750/dashboard
 | `app/main.go` | 파이프라인 로직 (App Functions SDK, Go) |
 | `app/res/configuration.yaml` | App Service 설정 |
 | `app/Dockerfile` | 멀티 스테이지 빌드 |
-| `device-profile/motor-vibration-sensor.yaml` | Motor01 디바이스 프로필 |
+| `device-profile/motor02-vibration-sensor.yaml` | Motor02 디바이스 프로필 |
 | `injector/sensor_injector.py` | 센서 시뮬레이터 (REST로 값 주입) |
 
 ## 알아두실 점 (정확성 관련)
@@ -108,8 +112,8 @@ curl http://localhost:59750/dashboard
 - **App Service가 계속 재시작됨** → `docker compose logs edge-stream-pipeline`에서
   `keeper.http://edgex-core-keeper:59890` 연결 오류가 보이면 03 스택이 완전히
   기동되기 전입니다. `docker compose ps`(03 폴더에서)로 core-keeper가 Up인지 확인 후 재시도
-- **Motor01 이벤트가 안 들어옴** → 1단계에서 디바이스 등록을 건너뛰었을 가능성.
-  EdgeX UI의 Devices 메뉴에서 Motor01이 있는지, injector 로그에 200 응답이 오는지 확인
+- **Motor02 이벤트가 안 들어옴** → 1단계에서 디바이스 등록을 건너뛰었을 가능성.
+  EdgeX UI의 Devices 메뉴에서 Motor02이 있는지, injector 로그에 200 응답이 오는지 확인
 - **네트워크 연결 실패(`edgex_edgex-network not found`)** → 03을 먼저 `up -d` 하지 않은 경우
 - **전체 초기화** → `docker compose down`(06에서) → `docker compose down -v`(03에서)
 

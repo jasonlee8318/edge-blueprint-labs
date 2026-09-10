@@ -18,9 +18,11 @@ HTTPSender(url, mimeType, persistOnError=true)
 ## 시작 전 필수 조건
 
 1. **3회차(`03-edgex-setup`)가 실행 중이어야 합니다.**
-2. **Motor01 디바이스가 등록돼 있어야 합니다.** 6강을 이미 진행하셨다면
-   그대로 재사용합니다. 처음이라면 `06-stream-pipeline/README.md`의
-   1단계(EdgeX UI에서 디바이스 프로필 임포트 + Motor01 등록)를 먼저 하세요.
+2. **Motor01 디바이스가 등록돼 있어야 합니다.** 5강·7강·10강(배포)은
+   모두 Motor01을 공유합니다(6강은 이 회차와 독립적으로 Motor02를
+   사용합니다). 이미 등록하셨다면 그대로 재사용하고, 처음이라면
+   `05-edge-pipeline/README.md`의 1단계(디바이스 프로필 임포트 +
+   Motor01 등록)를 먼저 하세요.
 
 ## 실행
 

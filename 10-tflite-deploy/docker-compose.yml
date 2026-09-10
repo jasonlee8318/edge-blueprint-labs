@@ -1,9 +1,9 @@
 name: edge-tflite-deploy-lab
 
 services:
-  # ── 10강 App Service: 진짜 TFLite 모델로 Motor01을 추론 ──
+  # ── 10강 App Service: 진짜 TFLite 모델로 Motor03을 추론 ──
   # 3회차(03-edgex-setup)가 먼저 떠 있어야 하고,
-  # Motor01 디바이스는 6강에서 등록한 것을 그대로 재사용합니다.
+  # Motor03 디바이스는 이 폴더의 device-profile로 독립적으로 등록합니다.
   edge-tflite-infer:
     build: ./app
     container_name: edgex-tflite-infer
